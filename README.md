@@ -21,3 +21,6 @@ Those three functions were only used for Flash. Adobe and the main browsers have
 
 ## Usage
 Please refer to the [example](./example.html)
+
+## Minified version of the Browsercheck library
+You can use the minified version of the library [browsercheck.min.js](./browsercheck.min.js)
