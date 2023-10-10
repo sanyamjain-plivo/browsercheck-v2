@@ -1,0 +1,52 @@
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="/browsercheck.js"></script>
+        <script type="text/javascript">
+		$(document).ready(function() {
+			console.log("Browsercheck in progress ...");
+
+			var plivocheck = PlivoCheck();
+			var version = "Browsercheck version " + plivocheck.version();
+			console.log(version);
+
+			var checkWebSocket = plivocheck.checkWebSocket();
+			var checkFlash = plivocheck.checkFlash();
+			var getFlashVer = plivocheck.getFlashVer();
+			var info = plivocheck.checkBrowser();
+			var browser = 'Browser Version : ' + info[0] + ' ' + info[1];
+			var checkOS = plivocheck.checkOS();
+			var checkMic = plivocheck.checkMic();
+			var checkWebRTC = plivocheck.checkWebRTC();
+
+			console.log("checkWebSocket: " + checkWebSocket);
+			console.log("checkFlash: " + checkFlash);
+			console.log("getFlashVer: " + getFlashVer);
+			console.log("checkBrowser: " + browser);
+			console.log("checkOS: " + checkOS);
+			console.log("checkMic: " + checkMic);
+			console.log("checkWebRTC: " + checkWebRTC);
+
+			$('#browsercheckVersion').text(version);
+			$('#checkWebSocket').text(checkWebSocket);
+			$('#checkFlash').text(checkFlash);
+			$('#getFlashVer').text(getFlashVer);
+			$('#checkBrowser').text(browser);
+			$('#checkOS').text(checkOS);
+			$('#checkMic').text(checkMic);
+			$('#checkWebRTC').text(checkWebRTC);
+
+			console.log("Browsercheck completed");
+		});
+        </script>
+</head>
+<body>
+	<div>version:</div><div id="browsercheckVersion"></div><br/>
+	<div>checkWebSocket:</div><div id="checkWebSocket"></div><br/>
+	<div>checkFlash:</div><div id="checkFlash"></div><br/>
+	<div>getFlashVer:</div><div id="getFlashVer"></div><br/>
+	<div>checkBrowser:</div><div id="checkBrowser"></div><br/>
+	<div>checkOS:</div><div id="checkOS"></div><br/>
+	<div>checkMic:</div><div id="checkMic"></div><br/>
+	<div>checkWebRTC:</div><div id="checkWebRTC"></div><br/>
+</body>

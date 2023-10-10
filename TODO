@@ -1,0 +1,1 @@
+- Use https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData/getHighEntropyValues to detect OS and Browser version when supported
