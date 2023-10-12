@@ -1,60 +1,55 @@
-var _browsercheck = {
-	// return the version
-	version: function() {
-		return "2.0";
-	},
-	// verify the browser supports Websocket with a function checkWebSocket
-	checkWebSocket: function() {
-		if ("WebSocket" in window) {
-			if (typeof(WebSocket) == "function") {
-				return true;
-			}
-		}
-		return false;
-	},
-	// verify the browser supports Flash with a function checkFlash
-	checkFlash: function() {
-		console.log("checkFlash function is deprecated.");
-		return false;
-	},
-	// get the Flash version with a function getFlashVer
-	getFlashVer: function() {
-		console.log("getFlashVer function is deprecated.");
-		return "0.0.0";
-	},
-	// verify the browser with a function checkBrowser
-	checkBrowser: function() {
-		var browser = BrowserDetect.browser;
-		var ver = BrowserDetect.fullVersion;
-		return [browser, ver];
-	},
-	// verify the OS with a function checkOS
-	checkOS: function () {
-		return BrowserDetect.fullOS;
-	},
-	// verify the browser suports the microphone with a function checkMic
-	checkMic: function() {
-		console.log("checkMic function is deprecated.");
-		return true;
-	},
-	// verify the browser supports WebRTC with a function checkWebRTC
-	checkWebRTC: function() {
-		return BrowserDetect.isWebrtcSupported();
-	}
-};
+(function () {
+        var plivocheck;
 
-function PlivoCheck() {
-	this.plivocheck = _browsercheck;
-	this.version = _browsercheck.version;
-	this.checkWebSocket = _browsercheck.checkWebSocket;
-	this.checkFlash = _browsercheck.checkFlash;
-	this.getFlashVer = _browsercheck.getFlashVer;
-	this.checkBrowser = _browsercheck.checkBrowser;
-	this.checkOS = _browsercheck.checkOS;
-	this.checkMic = _browsercheck.checkMic;
-	this.checkWebRTC = _browsercheck.checkWebRTC;
-	return this;
-};
+	plivocheck = (function () {
+		function plivocheck() {
+		}
+		// return the version
+		plivocheck.prototype.version = function() {
+			return "2.0";
+		};
+		// verify the browser supports Websocket with a function checkWebSocket
+		plivocheck.prototype.checkWebSocket = function() {
+			if ("WebSocket" in window) {
+				if (typeof(WebSocket) == "function") {
+					return true;
+				}
+			}
+			return false;
+		};
+		// verify the browser supports Flash with a function checkFlash
+		plivocheck.prototype.checkFlash = function() {
+			console.log("checkFlash function is deprecated.");
+			return false;
+		};
+		// get the Flash version with a function getFlashVer
+		plivocheck.prototype.getFlashVer= function() {
+			console.log("getFlashVer function is deprecated.");
+			return "0.0.0";
+		};
+		// verify the browser with a function checkBrowser
+		plivocheck.prototype.checkBrowser= function() {
+			var browser = BrowserDetect.browser;
+			var ver = BrowserDetect.fullVersion;
+			return [browser, ver];
+		};
+		// verify the OS with a function checkOS
+		plivocheck.prototype.checkOS = function() {
+			return BrowserDetect.fullOS;
+		};
+		// verify the browser suports the microphone with a function checkMic
+		plivocheck.prototype.checkMic = function() {
+			console.log("checkMic function is deprecated.");
+			return true;
+		};
+		// verify the browser supports WebRTC with a function checkWebRTC
+		plivocheck.prototype.checkWebRTC = function() {
+			return BrowserDetect.isWebrtcSupported();
+		};
+		return plivocheck;
+		})();
+	window.PlivoCheck = plivocheck;
+}).call(this);
 
 
 var BrowserDetect = {
@@ -214,5 +209,4 @@ var BrowserDetect = {
 };
 
 BrowserDetect.init();
-window.Plivocheck = PlivoCheck;
 
