@@ -43,7 +43,7 @@ var _browsercheck = {
 	}
 };
 
-var PlivoCheck = function() {
+function PlivoCheck() {
 	this.plivocheck = _browsercheck;
 	this.version = _browsercheck.version;
 	this.checkWebSocket = _browsercheck.checkWebSocket;
