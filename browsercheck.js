@@ -38,7 +38,7 @@ window.PlivoCheck = class PlivoCheck {
 	}
 	// verify the OS with a function checkOS
 	checkOS() {
-		return this.fullOS;
+		return this.OS;
 	}
 	// verify the browser suports the microphone with a function checkMic
 	checkMic() {
@@ -52,6 +52,22 @@ window.PlivoCheck = class PlivoCheck {
 			return false;
 		}
 		return true;
+	}
+	// verify the browser supports mediaDevices with a function checkMediaDevices
+	checkMediaDevices() {
+		if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+			return true;
+		}
+		return false;
+	}
+	// list the media devices with a function listMediaDevices
+	// return a Promise
+	listMediaDevices() {
+		if (!this.checkMediaDevices()) {
+			return Promise.reject("MediaDevices not supported"); 
+		} else {
+			return navigator.mediaDevices.enumerateDevices();
+		}
 	}
 }
 
@@ -188,12 +204,12 @@ var BrowserDetect = {
 		{
 			string: navigator.platform,
 			subString: "Mac",
-			identity: "Mac"
+			identity: "MacOS"
 		},
 		{
 			string: navigator.userAgent,
 			subString: "iPhone",
-			identity: "iPhone/iPod"
+			identity: "iPhone/iPad"
 		},
 		{
 			string: navigator.platform,
