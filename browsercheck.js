@@ -1,9 +1,17 @@
 window.PlivoCheck = class PlivoCheck {
 	constructor() {
+		this.version = "2.0";
+		BrowserDetect.init();
+		this.browser = BrowserDetect.browser;
+		this.browserVersion = BrowserDetect.version;
+		this.browserFullVersion = BrowserDetect.fullVersion;
+		this.OS = BrowserDetect.OS;
+		this.fullOS = BrowserDetect.fullOS;
 	}
+
 	// return the version
 	version() {
-		return "2.0";
+		return this.version;
 	}
 	// verify the browser supports Websocket with a function checkWebSocket
 	checkWebSocket() {
@@ -26,13 +34,11 @@ window.PlivoCheck = class PlivoCheck {
 	}
 	// verify the browser with a function checkBrowser
 	checkBrowser() {
-		var browser = BrowserDetect.browser;
-		var ver = BrowserDetect.fullVersion;
-		return [browser, ver];
+		return [this.browser, this.browserFullVersion];
 	}
 	// verify the OS with a function checkOS
 	checkOS() {
-		return BrowserDetect.fullOS;
+		return this.fullOS;
 	}
 	// verify the browser suports the microphone with a function checkMic
 	checkMic() {
@@ -41,10 +47,13 @@ window.PlivoCheck = class PlivoCheck {
 	}
 	// verify the browser supports WebRTC with a function checkWebRTC
 	checkWebRTC() {
-		return BrowserDetect.isWebrtcSupported();
+		var webrtc_support = navigator.mediaDevices.getUserMedia || navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || window.RTCPeerConnection || window.PeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection
+		if (!webrtc_support) {
+			return false;
+		}
+		return true;
 	}
 }
-
 
 // BrowserDetect
 // Author Alex Ho
@@ -191,19 +200,6 @@ var BrowserDetect = {
 			subString: "Linux",
 			identity: "Linux"
 		}
-	],
-	/**
-	 * Check if this browser version supported by plivo webrtc engine
-	 * @public
-	 */
-	isWebrtcSupported: function() {
-		var webrtc_support = navigator.mediaDevices.getUserMedia || navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || window.RTCPeerConnection || window.PeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection
-		if (!webrtc_support) {
-			return false;
-		}
-		return true;
-	}
+	]
 };
-
-BrowserDetect.init();
 
