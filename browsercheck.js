@@ -46,6 +46,9 @@ window.PlivoCheck = class PlivoCheck {
 }
 
 
+// BrowserDetect
+// Author Alex Ho
+// Code: https://gist.github.com/mralexho/d28fb26dc6787b86522f
 var BrowserDetect = {
 	init: function() {
 		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
