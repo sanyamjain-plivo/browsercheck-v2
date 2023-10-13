@@ -1,6 +1,6 @@
 window.PlivoCheck = class PlivoCheck {
 	constructor() {
-		this.version = "2.0";
+		this._version = "2.0";
 		BrowserDetect.init();
 		this.browser = BrowserDetect.browser;
 		this.browserVersion = BrowserDetect.version;
@@ -11,7 +11,7 @@ window.PlivoCheck = class PlivoCheck {
 
 	// return the version
 	version() {
-		return this.version;
+		return this._version;
 	}
 	// verify the browser supports Websocket with a function checkWebSocket
 	checkWebSocket() {

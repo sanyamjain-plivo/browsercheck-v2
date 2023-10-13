@@ -1,12 +1,12 @@
 <html>
 <head>
 	<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="/browsercheck.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/plivo/browsercheck-v2@main/browsercheck.js"></script>
         <script type="text/javascript">
 		$(document).ready(function() {
 			console.log("Browsercheck in progress ...");
 
-			var plivocheck = PlivoCheck();
+			var plivocheck = new window.PlivoCheck();
 			var version = "Browsercheck version " + plivocheck.version();
 			console.log(version);
 
@@ -18,6 +18,7 @@
 			var checkOS = plivocheck.checkOS();
 			var checkMic = plivocheck.checkMic();
 			var checkWebRTC = plivocheck.checkWebRTC();
+			var checkMediaDevices = plivocheck.checkMediaDevices();
 
 			console.log("checkWebSocket: " + checkWebSocket);
 			console.log("checkFlash: " + checkFlash);
@@ -35,6 +36,15 @@
 			$('#checkOS').text(checkOS);
 			$('#checkMic').text(checkMic);
 			$('#checkWebRTC').text(checkWebRTC);
+			$('#checkMediaDevices').text(checkMediaDevices);
+
+			plivocheck.listMediaDevices().then((devices) => {
+				for (var i = 0; i !== devices.length; ++i) {
+					var device = devices[i];
+					var name = device.kind + ': ' + device.label + ' id = ' + device.deviceId;
+					$('#listMediaDevices').append('<li>' + name + '</li>');
+				}
+			});
 
 			console.log("Browsercheck completed");
 		});
@@ -49,4 +59,6 @@
 	<div>checkOS:</div><div id="checkOS"></div><br/>
 	<div>checkMic:</div><div id="checkMic"></div><br/>
 	<div>checkWebRTC:</div><div id="checkWebRTC"></div><br/>
+	<div>checkMediaDevices:</div><div id="checkMediaDevices"></div><br/>
+	<div id="listMediaDevices"></div><br/>
 </body>
