@@ -23,8 +23,8 @@ Those three functions were only used for Flash. Adobe and the main browsers have
 
 ## Usage
 Please refer to:
-- [example](./example.html)
-- [example2](./example2.html)
+- [Basic example](./example.html)
+- [A bit more complex example](./example2.html)
 
 ## Minified version of the Browsercheck library
 You can use the minified version of the library [browsercheck.min.js](./browsercheck.min.js)
