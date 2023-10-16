@@ -10,6 +10,8 @@ Browsercheck javascript library
 - checkOS: retrieve the OS details
 - checkMic: deprecated function, always return true
 - checkWebRTC: verify the browser supports WebRTC
+- checkMediaDevices: verify the browser supports MediaDevices
+- listMediaDevices: return the list of media devices detected. (Promise)
 
 ## Flash deprecation
 The following functions are deprecated but still present:
@@ -20,7 +22,9 @@ The following functions are deprecated but still present:
 Those three functions were only used for Flash. Adobe and the main browsers have deprecated Flash.
 
 ## Usage
-Please refer to the [example](./example.html)
+Please refer to:
+- [example](./example.html)
+- [example2](./example2.html)
 
 ## Minified version of the Browsercheck library
 You can use the minified version of the library [browsercheck.min.js](./browsercheck.min.js)

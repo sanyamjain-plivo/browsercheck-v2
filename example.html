@@ -1,12 +1,14 @@
 <html>
 <head>
 	<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/plivo/browsercheck-v2@main/browsercheck.js"></script>
+	<script type="text/javascript" src="/static/js/browsercheck.js"></script>
         <script type="text/javascript">
+		var plivocheck;
+
 		$(document).ready(function() {
 			console.log("Browsercheck in progress ...");
 
-			var plivocheck = new window.PlivoCheck();
+			plivocheck = new window.PlivoCheck();
 			var version = "Browsercheck version " + plivocheck.version();
 			console.log(version);
 
@@ -41,8 +43,18 @@
 			plivocheck.listMediaDevices().then((devices) => {
 				for (var i = 0; i !== devices.length; ++i) {
 					var device = devices[i];
-					var name = device.kind + ': ' + device.label + ' id = ' + device.deviceId;
-					$('#listMediaDevices').append('<li>' + name + '</li>');
+					console.log(device);
+					if (device.kind == 'audioinput') {
+						var name = "Microphone: " + device.label;
+						console.log("Detected device: " + name);
+						$('#listMediaDevices').append('<li>' + name + '</li>');
+					} else if (device.kin == 'audioouput') {
+						var name = "Speaker: " + device.label;
+						console.log("Detected device: " + name);
+						$('#listMediaDevices').append('<li>' + name + '</li>');
+					} else {
+						console.log("Skipping detected device: " + name);
+					}
 				}
 			});
 
@@ -60,5 +72,5 @@
 	<div>checkMic:</div><div id="checkMic"></div><br/>
 	<div>checkWebRTC:</div><div id="checkWebRTC"></div><br/>
 	<div>checkMediaDevices:</div><div id="checkMediaDevices"></div><br/>
-	<div id="listMediaDevices"></div><br/>
+	<div>listMediaDevices:</div><div id="listMediaDevices"></div><br/>
 </body>

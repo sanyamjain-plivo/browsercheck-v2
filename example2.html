@@ -1,0 +1,201 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Plivo Browser Check</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+	<script type="text/javascript" src="/static/js/browsercheck.js"></script>
+	<style>
+		table { table-layout: fixed; }
+		table th, table td { overflow: hidden; }
+	</style>
+	<script type="text/javascript">
+	var plivocheck;
+
+	function webrtcCheck() {
+		$('#webrtc_row').removeClass('warning');
+		if (!plivocheck.checkWebRTC()) {
+			$('#webrtc_row').addClass('danger');
+			$('#webrtc_status').text('WebRTC is not supported');
+			return false;
+		} else {
+			if (!plivocheck.checkMediaDevices()) {
+				$('#webrtc_row').addClass('danger');
+				$('#webrtc_status').text('WebRTC is supported but MediaDevices is not supported');
+				return false;
+			}
+			$('#webrtc_row').addClass('success');
+			$('#webrtc_status').text('WebRTC is supported');
+			return true;
+		}
+	}
+
+	function browserCheck() {
+		var info = plivocheck.checkBrowser();
+		var browserStatus = 'Browser Version : ' + info[0] + ' ' + info[1];
+		$('#browser_row').addClass('success');
+		$('#browser_status').text(browserStatus);
+		$('#browser_row').removeClass('warning');
+		return true;
+	}
+
+	function browsercheckVersion() {
+		var v = plivocheck.version();
+		$('#browsercheck_row').addClass('success');
+		$('#browsercheck_status').text("Browsercheck version: " + v);
+		$('#browsercheck_row').removeClass('warning');
+		return true;
+	}
+
+	function websocketCheck() {
+		var status = plivocheck.checkWebSocket();
+		$('#ws_row').removeClass('warning');
+		if (!status) {
+			$('#ws_row').addClass('danger');
+			$('#ws_status').text('WebSocket is supported');
+			return false;
+		} else {
+			$('#ws_row').addClass('success');
+			$('#ws_status').text('WebSocket is supported');
+			return true;
+		}
+	}
+
+	function setCurrentTime() {
+		var currTime = Date().toString();
+		$('#current_time_txt').text(currTime);
+	}
+
+	function detectOS() {
+		var os_name = plivocheck.checkOS();
+		if (os_name !== undefined) {
+			$('#os_row').removeClass('warning');
+			$('#os_row').addClass('success');
+			$('#os_status').text('OS : ' + os_name);
+		}
+	};
+	$(document).ready(function() {
+		plivocheck = new window.PlivoCheck();
+		setCurrentTime();
+		detectOS();
+		var isBrowserSupported = false;
+		var browsercheckVersionStatus = browsercheckVersion();
+		var webrtcStatus = webrtcCheck();
+		var browserStatus = browserCheck();
+		var websocketStatus = websocketCheck();
+		if (browserStatus) {
+			if (websocketStatus && webrtcStatus) {
+				isBrowserSupported = true;
+			}
+		}
+
+		if (isBrowserSupported) {
+			$('#check_status').text('Your browser is supported by the Plivo BrowserSDK');
+			$('#check_status').removeClass('alert-info');
+			$('#check_status').addClass('alert-success');
+			plivocheck.listMediaDevices().then((devices) => {
+				if (!devices || devices.length <= 0) {
+					$('#check_status').text('Your browser is supported by the Plivo BrowserSDK but no media devices were detected');
+					$('#check_status').removeClass('alert-info');
+					$('#check_status').addClass('alert-danger');
+				} else {
+					var audioInputDevices = Array();
+					var audioOutputDevices = Array();
+					for (var i = 0; i !== devices.length; ++i) {
+						var device = devices[i];
+						if (device.kind == 'audioinput') {
+							audioInputDevices.push(device.label);
+						} else if (device.kind == 'audiooutput') {
+							audioOutputDevices.push(device.label);
+						} else {
+							console.log('Skip device kind : ' + device.kind + ' with label : ' + device.label);
+						}
+					}
+					if (audioInputDevices.length == 0) {
+						$("#status_box" ).append('<h4><div class="alert-danger">No Microphone found</div></h4>');
+						$('#check_status').text('Your browser is supported by the Plivo BrowserSDK but no Microphone was detected');
+						$('#check_status').removeClass('alert-info');
+						$('#check_status').addClass('alert-danger');
+					} else {
+						$("#status_box" ).append('<h4><div class="alert-success">Total Microphones found: ' + audioInputDevices.length + '</div></h4>');
+						for (var i = 0; i !== audioInputDevices.length; ++i) {
+							$("#status_box" ).append('<li class="alert-info" class="list-group-item">Microphone: ' + audioInputDevices[i] + '</li>');
+						}
+					}
+					$("#status_box" ).append('<br/>');
+
+					if (audioOutputDevices.length == 0) {
+						$("#status_box" ).append('<h4><div class="alert-danger">No Speaker found</div></h4>');
+						$('#check_status').text('Your browser is supported by the Plivo BrowserSDK but no Speaker was detected');
+						$('#check_status').removeClass('alert-info');
+						$('#check_status').addClass('alert-danger');
+					} else {
+						$("#status_box" ).append('<h4><div class="alert-success">Total Speakers found: ' + audioOutputDevices.length + '</div></h4>');
+						for (var i = 0; i !== audioOutputDevices.length; ++i) {
+							$("#status_box" ).append('<li class="alert-info" class="list-group-item">Speaker: ' + audioOutputDevices[i] + '</li>');
+						}
+					}
+					$("#status_box" ).append('<br/>');
+				};
+			});
+
+		} else {
+			$('#check_status').text('Your browser is not supported by the Plivo BrowserSDK');
+			$('#check_status').removeClass('alert-info');
+			$('#check_status').addClass('alert-danger');
+		}
+	});
+	</script>
+</head>
+<body>
+	<div class='container'>
+		<div class="masthead">
+			<ul class="nav nav-pills pull-right">
+				<li><a href="https://plivo.com/" target="_blank">Go to plivo.com</a></li>
+			</ul>
+			<h2 class="muted">Plivo Browsercheck</h2>
+		</div>
+		<p class='lead'>This page will test your browser for the Plivo BrowserSDK compatibility.
+		</p>
+		<div class='row'>
+			<div class='col-lg-4' id='check_box'>
+				<table class='table'>
+					<p id='current_time_txt'>
+						Get Current Time....
+					</p>
+					<tr id='browsercheck_row' class='warning'>
+						<td id='browsercheck_status'>Checking Browsercheck version...</td>
+					</tr>
+					<tr><td></td></tr>
+					<tr id='os_row' class='warning'>
+						<td id='os_status'>Checking your Operating System...</td>
+					</tr>
+					<tr><td></td></tr>
+					<tr id='browser_row' class='warning'>
+						<td id='browser_status'>Checking Browser...</td>
+					</tr>
+					<tr><td></td></tr>
+					<tr id='ws_row' class='warning'>
+						<td id='ws_status'>Checking Websocket...</td>
+					</tr>
+					<tr><td></td></tr>
+					<tr id='webrtc_row' class='warning'>
+						<td id='webrtc_status'>Checking WebRTC...</td>
+					</tr>
+					<tr><td></td></tr>
+				</table>
+			</div>
+			<div class='col-lg-4' id='status_box'>
+				<div id ='check_status_box'>
+					<h3><div id='check_status' class='alert alert-info'>Checking your browser for compatibility with the Plivo BrowserSDK.....</div><h3>
+				</div>
+			</div>
+		</div>
+		<div class='row'><hr>
+		</div>
+	</div>
+
+</body>
+</html>
