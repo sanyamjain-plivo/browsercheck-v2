@@ -55,7 +55,7 @@ window.PlivoCheck = class PlivoCheck {
 	}
 	// verify the browser supports mediaDevices with a function checkMediaDevices
 	checkMediaDevices() {
-		if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+		if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices && navigator.mediaDevices.getUserMedia) {
 			return true;
 		}
 		return false;
@@ -64,12 +64,20 @@ window.PlivoCheck = class PlivoCheck {
 	// return a Promise
 	listMediaDevices() {
 		if (!this.checkMediaDevices()) {
+			console.log("MediaDevices not supported");
 			return Promise.reject("MediaDevices not supported"); 
 		} else {
-			return navigator.mediaDevices.enumerateDevices();
+			return navigator.mediaDevices.getUserMedia({audio: true, video: false})
+				.then((stream) => {
+					return navigator.mediaDevices.enumerateDevices();
+				})
+				.catch((error) => {
+					console.log("mediaDevices.getUserMedia: " + error);
+					return Promise.reject("mediaDevices.getUserMedia: " + error); 
+				});
 		}
 	}
-}
+}	
 
 // BrowserDetect
 // Author Alex Ho
