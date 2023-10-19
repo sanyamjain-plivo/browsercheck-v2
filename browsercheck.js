@@ -22,12 +22,12 @@ window.PlivoCheck = class PlivoCheck {
 		}
 		return false;
 	}
-	// verify the browser supports Flash with a function checkFlash
+	// DEPRECATED verify the browser supports Flash with a function checkFlash
 	checkFlash() {
 		console.log("checkFlash function is deprecated.");
 		return false;
 	}
-	// get the Flash version with a function getFlashVer
+	// DEPRECATED get the Flash version with a function getFlashVer
 	getFlashVer() {
 		console.log("getFlashVer function is deprecated.");
 		return "0.0.0";
@@ -40,7 +40,7 @@ window.PlivoCheck = class PlivoCheck {
 	checkOS() {
 		return this.OS;
 	}
-	// verify the browser suports the microphone with a function checkMic
+	// DEPRECATED verify the browser supports the microphone with a function checkMic
 	checkMic() {
 		console.log("checkMic function is deprecated.");
 		return true;
@@ -64,16 +64,16 @@ window.PlivoCheck = class PlivoCheck {
 	// return a Promise
 	listMediaDevices() {
 		if (!this.checkMediaDevices()) {
-			console.log("MediaDevices not supported");
-			return Promise.reject("MediaDevices not supported"); 
+			console.log("navigator.mediaDevices is not supported by your browser.");
+			return Promise.reject("navigator.mediaDevices is not supported by your browser."); 
 		} else {
 			return navigator.mediaDevices.getUserMedia({audio: true, video: false})
 				.then((stream) => {
 					return navigator.mediaDevices.enumerateDevices();
 				})
 				.catch((error) => {
-					console.log("mediaDevices.getUserMedia: " + error);
-					return Promise.reject("mediaDevices.getUserMedia: " + error); 
+					console.log("navigator.mediaDevices.getUserMedia failed: " + error);
+					return Promise.reject("navigator.mediaDevices.getUserMedia failed: " + error); 
 				});
 		}
 	}

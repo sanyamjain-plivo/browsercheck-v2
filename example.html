@@ -56,6 +56,10 @@
 						console.log("Skipping detected device: " + name);
 					}
 				}
+			})
+			.catch((error) => {
+				console.log("Error listing media devices: " + error);
+				$('#listMediaDevices').append('<li>' + error + '</li>');
 			});
 
 			console.log("Browsercheck completed");

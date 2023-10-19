@@ -76,6 +76,20 @@
 			$('#os_status').text('OS : ' + os_name);
 		}
 	};
+	function mediaDevicesCheck() {
+		var mdStatus = plivocheck.checkMediaDevices();
+		$('#md_row').removeClass('warning');
+		if (!mdStatus) {
+			$('#md_row').addClass('danger');
+			$('#md_status').text('MediaDevices is not supported');
+			return false;
+		} else {
+			$('#md_row').addClass('success');
+			$('#md_status').text('MediaDevices is supported');
+			return true;
+		}
+	};
+
 	$(document).ready(function() {
 		plivocheck = new window.PlivoCheck();
 		setCurrentTime();
@@ -85,8 +99,9 @@
 		var webrtcStatus = webrtcCheck();
 		var browserStatus = browserCheck();
 		var websocketStatus = websocketCheck();
+		var checkMediaDevices = mediaDevicesCheck();
 		if (browserStatus) {
-			if (websocketStatus && webrtcStatus) {
+			if (websocketStatus && webrtcStatus && checkMediaDevices) {
 				isBrowserSupported = true;
 			}
 		}
@@ -139,6 +154,12 @@
 					}
 					$("#status_box" ).append('<br/>');
 				};
+			})
+			.catch((error) => {
+				$('#check_status').text('Your browser is supported by the Plivo BrowserSDK but no media devices were detected');
+				$('#check_status_box').append('<div class="alert-danger">' + error + '</div>');
+				$('#check_status').removeClass('alert-info');
+				$('#check_status').addClass('alert-danger');
 			});
 
 		} else {
@@ -183,6 +204,10 @@
 					<tr><td></td></tr>
 					<tr id='webrtc_row' class='warning'>
 						<td id='webrtc_status'>Checking WebRTC...</td>
+					</tr>
+					<tr><td></td></tr>
+					<tr id='md_row' class='warning'>
+						<td id='md_status'>Checking MediaDevices...</td>
 					</tr>
 					<tr><td></td></tr>
 				</table>
